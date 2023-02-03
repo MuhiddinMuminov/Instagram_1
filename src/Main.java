@@ -62,6 +62,9 @@ public class Main {
     }
 
     private static void userMenu() {
+
+        System.out.println("Hello");
+
         System.out.println("1-My posts\t2-My accounts\t3-My followers\t4-My likes\t5-Search\t0-Back");
         int act=scanInt.nextInt();
         switch(act){
@@ -88,6 +91,7 @@ public class Main {
     }
 
     private static void myAcc() {
+
 
     }
 
@@ -148,7 +152,17 @@ public class Main {
                         }
                     } } }
             else {
-                System.out.println("Wrong something. Try Again ❌" );
+
+                System.out.println("\nWrong something. Try Again ❌\n" );
+            }
+        }
+    }
+    public static void defaultD(){
+        userService.add(new User("hgghghjh","dli1999"));
+        userService.add(new User("mittime","mittivine"));
+        userService.add(new User("cristiano","cr7family"));
+           System.out.println("Wrong something. Try Again ❌" );
+
             }
         }
     }
