@@ -1,6 +1,5 @@
 package uz.pdp.Instagram.service.postservice;
 
-import uz.pdp.Instagram.model.User;
 import uz.pdp.Instagram.model.post.Post;
 import uz.pdp.Instagram.repository.PostRepository;
 
@@ -44,10 +43,5 @@ public class PostServiceImpl implements PostService, PostRepository {
             }
         }
         return -1;
-    }
-
-    @Override
-    public User signIn(String username, String password) {
-        return null;
     }
 }
