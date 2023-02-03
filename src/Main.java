@@ -7,21 +7,28 @@ import uz.pdp.Instagram.service.postservice.PostServiceImpl;
 import uz.pdp.Instagram.service.userservice.UserService;
 import uz.pdp.Instagram.service.userservice.UserServiceImpl;
 
-import java.util.Random;
 import java.util.Scanner;
 import java.util.UUID;
+
 public class Main {
-    static Random random= new Random();
     static UserService userService = new UserServiceImpl();
     static PostService postService = new PostServiceImpl();
     static FollowersService followersService = new FollowersServiceImpl();
+
     static Scanner scanInt = new Scanner(System.in);
     static Scanner scanStr = new Scanner(System.in);
+    static {
+        userService.add(new User("dilime","dli1999"));
+        userService.add(new User("mitti_me","mittivine"));
+        userService.add(new User("cristiano","cr7family"));
+    }
+    static UUID ID=null;
+
     public static void main(String[] args) {
-        defaultD();
-        while (true){
-        System.out.println("1-Sign up\t\t2-Sign In\t\t0.Exit");
+        while(true){
+        System.out.println("1-Sign up\t2-Sign In\t\t0.Exit");
         int act = scanInt.nextInt();
+
             switch (act) {
                 case 1 -> {
                     signUp();
@@ -35,115 +42,114 @@ public class Main {
             }
         }
     }
+
     private static void signIn() {
         System.out.print("Enter username: ");
         String username = scanStr.nextLine();
         System.out.print("Enter password: ");
         String password = scanStr.nextLine();
-        User user = userService.signIn(username,password);
-            if (user!=null && user.getUsername().equals(username) && user.getPassword().equals(password)){
-                userMenu();    }
-            else {
-                System.out.println("\nWe did not find this user ❌\n");
+       {
+            if (userService.getByuser(username,password)!=null) {
+                ID=userService.getid(username);
+                userMenu();
+
             }
+            else {
+                System.out.println("We did not find this user ❌");
+
+            }
+        }
     }
 
     private static void userMenu() {
-        System.out.println("Hello");
+        System.out.println("1-My posts\t2-My accounts\t3-My followers\t4-My likes\t5-Search\t0-Back");
+        int act=scanInt.nextInt();
+        switch(act){
+            case 1->myPots();
+            case 2->myAcc();
+            case 3->muFollowers();
+            case 4->muLikes();
+            case 5->searchp();
+            case 0->{return ;}
+        }
 
     }
 
+    private static void searchp() {
+
+    }
+
+    private static void muLikes() {
+
+    }
+
+    private static void muFollowers() {
+
+    }
+
+    private static void myAcc() {
+
+    }
+
+    private static void myPots() {
+
+    }
+
+
     private static void signUp() {
-        while (true){
         System.out.println("Choose the type of signing up:");
         System.out.println("1-With Gmail\t\t2-With Phone number\t\t0-Back");
-            switch (scanInt.nextInt()) {
-                case 1 -> {
-                    gmailUp();
-                }
-                case 2 -> {
-                    phoneUp();
-                }
+        int act1 = scanInt.nextInt();
+        while (true){
+            switch (act1) {
+                case 1 -> gmailUp();
+                case 2 -> phoneUp();
                 case 0 -> {
                     return;
                 }
             }
         }
-      }
+    }
 
 
     private static void phoneUp() {
-        System.out.print("Enter username: ");
+        System.out.print("Enter your phone number: ");
+        String phoneNumber = scanInt.nextLine();
+        System.out.print("Enter your username: ");
         String username = scanStr.nextLine();
-        for (User user1: UserRepository.users) {
-        if (user1.getUsername().equals(username)){
-            System.out.println("\nThis username has already used ❌\n");
-            return;
-        }
-        else {
-        System.out.print("Enter phone number: (+998) ");
-        String phoneNumber = scanStr.nextLine();
-        if (phoneNumber.length()==9){
-            while (true){
-                int randomNum = random.nextInt(1000,9999);
-                System.out.println("Your SMS code: " + randomNum);
-                System.out.print("Enter SMS code: ");
-                int smscode= scanInt.nextInt();
-                if (smscode==randomNum){
-                    System.out.println("SMS ✅");
-                    break;
-                }
-                else {
-                    System.out.println("Incorrect SMS code ❌");
-                }
-            }
-            System.out.print("Enter your own password: ");
-            String password= scanStr.nextLine();
-            if (password.length()>=8){
-            User user = new User(username,phoneNumber,password);
-            userService.add(user);
-            System.out.println("Sign Up Successfully ✅");
-        } else {
-                System.out.println("Password length must be more 8 character ❗");
-            }
-        }
-        else {
-            System.out.println("Phone Number is Wrong !  Try Again !");
-        }
-      }
+        while(true){
+        System.out.print("Enter your password: ");
+        String password = scanInt.nextLine();
+            userService.add(new User(username, password, phoneNumber));
         }
     }
-
     private static void gmailUp() {
         while(true){
             System.out.print("Enter your gmail:  ");
             String gmail=scanStr.nextLine();
-            if (gmail.endsWith("@gmail.com")){
-                System.out.print("Enter your username:  ");
+            if (gmail.endsWith("@gmail.com")){System.out.print("Enter your username:  ");
                 String username=scanStr.nextLine();
-                for (User user: UserRepository.users) {
-                    if (user.getUsername().equals(username)){
-                        System.out.println("\nThis username has already used ❌\n");
+                for (int i = 0; i < UserRepository.users.size(); i++) {
+                    if (UserRepository.users.get(i).getUsername().equals(username)){
+                        System.out.println("This username has already used ❌");
                         return;
                     } else {
                         System.out.print("Create a password:  ");
                         String password=scanStr.nextLine();
-                        if (password.length()>8){
-                            userService.add(new User(username,password,gmail));
-                            System.out.println("Sign Up Successfully ✅");
+                        if (password.length()>=8){
+                           if(userService.add(new User(username,password,gmail))==1) {
+                               System.out.println("Successfully saved your account");
+                               userMenu();
+                           }
                         }
                         else {
-                            System.out.println("Password length must be more 8 character ❗");
+                            System.out.println("Password length must be more 8 character !");
                             return;
                         }
                     } } }
             else {
-                System.out.println("\nWrong something. Try Again ❌\n" );
-            }
-        }}
-    public static void defaultD(){
-        userService.add(new User("dilime","dli1999"));
-        userService.add(new User("mittime","mittivine"));
-        userService.add(new User("cristiano","cr7family"));
+                System.out.println("Wrong something. Try Again ❌" );
             }
         }
+    }
+}
