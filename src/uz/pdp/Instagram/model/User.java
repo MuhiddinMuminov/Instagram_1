@@ -22,6 +22,11 @@ private String Bio;
         this.fullName = fullName;
     }
 
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
     public User(String mittime, String mittivine, String s) {
     }
 

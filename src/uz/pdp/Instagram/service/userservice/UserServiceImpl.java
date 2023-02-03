@@ -41,4 +41,24 @@ public class UserServiceImpl implements UserService, UserRepository {
         }
         return -1;
     }
+
+    @Override
+    public User getByuser(String username, String password) {
+        for (User user:users) {
+            if(user.getUsername().equals(username)&&user.getPassword().equals(password)){
+                return user;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public UUID getid(String username) {
+        for (User user:users) {
+            if(user.getUsername().equals(username)){
+                return user.getId();
+            }
+        }
+        return null;
+    }
 }

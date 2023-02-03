@@ -17,12 +17,18 @@ public class Main {
 
     static Scanner scanInt = new Scanner(System.in);
     static Scanner scanStr = new Scanner(System.in);
+    static {
+        userService.add(new User("dilime","dli1999"));
+        userService.add(new User("mitti_me","mittivine"));
+        userService.add(new User("cristiano","cr7family"));
+    }
+    static UUID ID=null;
 
     public static void main(String[] args) {
-        defaultD();
+        while(true){
         System.out.println("1-Sign up\t2-Sign In\t\t0.Exit");
         int act = scanInt.nextInt();
-        while (true) {
+
             switch (act) {
                 case 1 -> {
                     signUp();
@@ -42,22 +48,46 @@ public class Main {
         String username = scanStr.nextLine();
         System.out.print("Enter password: ");
         String password = scanStr.nextLine();
-        for (int i = 0; i < UserRepository.users.size(); i++) {
-            if (password.equals(UserRepository.users.get(i).getPassword()) &&
-                    username.equals(UserRepository.users.get(i).getUsername())){
+       {
+            if (userService.getByuser(username,password)!=null) {
+                ID=userService.getid(username);
                 userMenu();
-                break;
+
             }
             else {
                 System.out.println("We did not find this user ❌");
-                break;
+
             }
         }
     }
 
     private static void userMenu() {
-        System.out.println("Hello");
+        System.out.println("1-My posts\t2-My accounts\t3-My followers\t4-My likes\t5-Search\t0-Back");
+        int act=scanInt.nextInt();
+        switch(act){
+            case 1->myPots();
+            case 2->myAcc();
+            case 3->muFollowers();
+            case 4->muLikes();
+            case 5->searchp();
+            case 0->{return ;}
+        }
 
+    }
+
+    private static void searchp() {
+    }
+
+    private static void muLikes() {
+    }
+
+    private static void muFollowers() {
+    }
+
+    private static void myAcc() {
+    }
+
+    private static void myPots() {
     }
 
     private static void signUp() {
@@ -78,15 +108,15 @@ public class Main {
 
     private static void phoneUp() {
         System.out.print("Enter your phone number: ");
-        String  phoneNumber=scanInt.nextLine();
+        String phoneNumber = scanInt.nextLine();
         System.out.print("Enter your username: ");
-        String username=scanStr.nextLine();
+        String username = scanStr.nextLine();
+        while(true){
         System.out.print("Enter your password: ");
-        String password=scanInt.nextLine();
-        userService.add(new User(username,password,phoneNumber));
-
+        String password = scanInt.nextLine();
+            userService.add(new User(username, password, phoneNumber));
+        }
     }
-
     private static void gmailUp() {
         while(true){
             System.out.print("Enter your gmail:  ");
@@ -100,8 +130,12 @@ public class Main {
                     } else {
                         System.out.print("Create a password:  ");
                         String password=scanStr.nextLine();
-                        if (password.length()>8){
-                            userService.add(new User(username,password,gmail)); }
+                        if (password.length()>=8){
+                           if(userService.add(new User(username,password,gmail))==1) {
+                               System.out.println("Successfully saved your account");
+                               userMenu();
+                           }
+                        }
                         else {
                             System.out.println("Password length must be more 8 character !");
                             return;
@@ -110,10 +144,6 @@ public class Main {
             else {
                 System.out.println("Wrong something. Try Again ❌" );
             }
-        }}
-    public static void defaultD(){
-        userService.add(new User("dilime","dli1999","880007799"));
-        userService.add(new User("mittime","mittivine","880007799"));
-        userService.add(new User("cristiano","cr7family","880007799"));
+        }
     }
 }
