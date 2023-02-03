@@ -76,19 +76,25 @@ public class Main {
     }
 
     private static void searchp() {
+
     }
 
     private static void muLikes() {
+
     }
 
     private static void muFollowers() {
+
     }
 
     private static void myAcc() {
+
     }
 
     private static void myPots() {
+
     }
+
 
     private static void signUp() {
         System.out.println("Choose the type of signing up:");
