@@ -14,6 +14,7 @@ import java.util.Scanner;
 import java.util.UUID;
 
 import static uz.pdp.Instagram.model.post.PostType.*;
+import static uz.pdp.Instagram.repository.PostRepository.*;
 
 public class Main {
     static UserService userService = new UserServiceImpl();
@@ -130,7 +131,6 @@ public class Main {
             }
         }
     }
-
     private static void likePost() {
     }
 
@@ -138,6 +138,11 @@ public class Main {
     }
 
     private static void deletePost() {
+        showPost();
+        System.out.print("Enter number of post: ");
+        int num= scanInt.nextInt();
+        postService.deleteById(PostRepository.posts.get(num-1).getId());
+        System.out.println("Post deleted");
     }
 
     private static void createPost() {
@@ -145,23 +150,26 @@ public class Main {
         String type=scanStr.nextLine();
         System.out.print("Enter description: ");
         String description=scanStr.nextLine();
-        if (type.equals("P")){
-            Post post = new Post(PHOTO,UUID.randomUUID(),description,likes.nextInt(10000,999999));
-            postService.add(post);
-            System.out.println("Created Successfully ✅");
-        }
-        else if (type.equals("R")){
-            Post post = new Post(REELS,UUID.randomUUID(),description,likes.nextInt(10000,999999));
-            postService.add(post);
-            System.out.println("Created Successfully ✅");
-        }
-        else if (type.equals("V")){
-            Post post = new Post(VIDEO,UUID.randomUUID(),description,likes.nextInt(10000,999999));
-            postService.add(post);
-            System.out.println("Created Successfully ✅");
-        }
-        else {
-            System.out.println("Wrong Type ❌");
+        switch (type) {
+            case "P" -> {
+                Post post = new Post(PHOTO, UUID.randomUUID(), description, likes.nextInt(10000, 999999));
+                postService.add(post);
+                System.out.println("Created Successfully ✅");
+            }
+            case "R" -> {
+                Post post = new Post(REELS, UUID.randomUUID(), description, likes.nextInt(10000, 999999));
+                postService.add(post);
+                System.out.println("Created Successfully ✅");
+            }
+            case "V" -> {
+                Post post = new Post(VIDEO, UUID.randomUUID(), description, likes.nextInt(10000, 999999));
+                postService.add(post);
+                System.out.println("Created Successfully ✅");
+            }
+            default -> {
+                System.out.println("Wrong Type ❌");
+                  return;
+            }
         }
     }
 
@@ -170,7 +178,7 @@ public class Main {
             if (PostRepository.posts.get(i) == null){
                 System.out.println("You have no posts yet ❗");
             }else {
-                System.out.println(PostRepository.posts.get(i));
+                System.out.println(1+i +"."+ PostRepository.posts.get(i));
             }
         }
     }
@@ -188,8 +196,6 @@ public class Main {
             }
         }
     }
-
-
     private static void phoneUp() {
         System.out.print("Enter full name: ");
         String fullname = scanStr.nextLine();

@@ -28,18 +28,17 @@ public class PostServiceImpl implements PostService, PostRepository {
     public int edit(Post update) {
         for (int i = 0; i < posts.size(); i++) {
             if(posts.get(i).getId().equals(update.getId())){
-
                 return 1;
            }
-
         }
         return -1;
     }
 
     @Override
     public int deleteById(UUID Id) {
-        for (Post post:posts) {
-            if(post.getId().equals(Id)){
+        for (Post post: posts) {
+            if (post.getId().equals(Id)){
+                posts.remove(post);
                 return 1;
             }
         }

@@ -34,12 +34,7 @@ public class UserServiceImpl implements UserService, UserRepository {
 
     @Override
     public int deleteById(UUID Id) {
-        for (User user : users) {
-            if (user.getId().equals(Id)) {
-                return 1;
-            }
-        }
-        return -1;
+        return 0;
     }
 
     @Override
