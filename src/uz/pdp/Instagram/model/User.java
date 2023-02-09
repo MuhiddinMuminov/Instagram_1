@@ -4,8 +4,10 @@ public class User extends BaseModel {
     private String username;
     private String password;
     private String phoneNumber;
-private String fullName;
-private String Bio;
+    private String fullName;
+    private Integer followers;
+    private Integer following;
+    private String Bio;
 
     public User(String username, String password, String phoneNumber, String fullName, String bio) {
         this.username = username;
@@ -68,5 +70,41 @@ private String Bio;
 
     public void setBio(String bio) {
         Bio = bio;
+    }
+
+    public Integer getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(Integer followers) {
+        this.followers = followers;
+    }
+
+    public Integer getFollowing() {
+        return following;
+    }
+
+    public void setFollowing(Integer following) {
+        this.following = following;
+    }
+
+    public User(String username, String password, String phoneNumber, String fullName, Integer followers, Integer following, String bio) {
+        this.username = username;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.fullName = fullName;
+        this.followers = followers;
+        this.following = following;
+        Bio = bio;
+    }
+
+    @Override
+    public String toString() {
+        return
+                "Username = " + username + "  ||  " +
+                "FullName = " + fullName + "  ||  " +
+                "Followers = " + followers +"  ||  " +
+                "Following = " + following +"  ||  " +
+                "Bio = " + Bio ;
     }
 }

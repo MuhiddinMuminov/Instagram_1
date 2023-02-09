@@ -1,4 +1,6 @@
 import uz.pdp.Instagram.model.User;
+import uz.pdp.Instagram.model.post.Post;
+import uz.pdp.Instagram.repository.PostRepository;
 import uz.pdp.Instagram.repository.UserRepository;
 import uz.pdp.Instagram.service.followersservice.FollowersService;
 import uz.pdp.Instagram.service.followersservice.FollowersServiceImpl;
@@ -7,8 +9,11 @@ import uz.pdp.Instagram.service.postservice.PostServiceImpl;
 import uz.pdp.Instagram.service.userservice.UserService;
 import uz.pdp.Instagram.service.userservice.UserServiceImpl;
 
+import java.util.Random;
 import java.util.Scanner;
 import java.util.UUID;
+
+import static uz.pdp.Instagram.model.post.PostType.*;
 
 public class Main {
     static UserService userService = new UserServiceImpl();
@@ -17,12 +22,9 @@ public class Main {
 
     static Scanner scanInt = new Scanner(System.in);
     static Scanner scanStr = new Scanner(System.in);
-    static {
-        userService.add(new User("dilime","dli1999"));
-        userService.add(new User("mitti_me","mittivine"));
-        userService.add(new User("cristiano","cr7family"));
-    }
+    static Random random = new Random();
     static UUID ID=null;
+    static Random likes=new Random();
 
     public static void main(String[] args) {
         while(true){
@@ -62,31 +64,35 @@ public class Main {
     }
 
     private static void userMenu() {
-
-        System.out.println("Hello");
-
         System.out.println("1-My posts\t2-My accounts\t3-My followers\t4-My likes\t5-Search\t0-Back");
         int act=scanInt.nextInt();
-        switch(act){
-            case 1->myPots();
-            case 2->myAcc();
-            case 3->muFollowers();
-            case 4->muLikes();
-            case 5->searchp();
-            case 0->{return ;}
+        while (true) {
+            switch (act) {
+                case 1 -> myPosts();
+                case 2 -> myAcc();
+                case 3 -> myFollowers();
+                case 4 -> myLikes();
+                case 5 -> search();
+                case 0 -> {
+                    return;
+                }
+                default -> {
+                    System.out.println("Wrong Command ❌");
+                    return;
+                }
+            }
         }
+    }
+
+    private static void search() {
 
     }
 
-    private static void searchp() {
+    private static void myLikes() {
 
     }
 
-    private static void muLikes() {
-
-    }
-
-    private static void muFollowers() {
+    private static void myFollowers() {
 
     }
 
@@ -95,11 +101,79 @@ public class Main {
 
     }
 
-    private static void myPots() {
-
+    private static void myPosts() {
+            while (true) {
+            System.out.println("1.Show Posts\t2.Create Post\t3.Delete Post\t4.Comment\t5.Like Post\t0.Back");
+            switch (scanInt.nextInt()){
+                case 1->{
+                    showPost();
+                }
+                case 2->{
+                    createPost();
+                }
+                case 3->{
+                    deletePost();
+                }
+                case 4->{
+                    commentPost();
+                }
+                case 5->{
+                    likePost();
+                }
+                case 0->{
+                    return;
+                }
+                default -> {
+                    System.out.println("Wrong Command ❌");
+                    return;
+                }
+            }
+        }
     }
 
+    private static void likePost() {
+    }
 
+    private static void commentPost() {
+    }
+
+    private static void deletePost() {
+    }
+
+    private static void createPost() {
+        System.out.print("Choose type post(P,R,V): ");
+        String type=scanStr.nextLine();
+        System.out.print("Enter description: ");
+        String description=scanStr.nextLine();
+        if (type.equals("P")){
+            Post post = new Post(PHOTO,UUID.randomUUID(),description,likes.nextInt(10000,999999));
+            postService.add(post);
+            System.out.println("Created Successfully ✅");
+        }
+        else if (type.equals("R")){
+            Post post = new Post(REELS,UUID.randomUUID(),description,likes.nextInt(10000,999999));
+            postService.add(post);
+            System.out.println("Created Successfully ✅");
+        }
+        else if (type.equals("V")){
+            Post post = new Post(VIDEO,UUID.randomUUID(),description,likes.nextInt(10000,999999));
+            postService.add(post);
+            System.out.println("Created Successfully ✅");
+        }
+        else {
+            System.out.println("Wrong Type ❌");
+        }
+    }
+
+    private static void showPost() {
+        for (int i = 0; i < PostRepository.posts.size(); i++) {
+            if (PostRepository.posts.get(i) == null){
+                System.out.println("You have no posts yet ❗");
+            }else {
+                System.out.println(PostRepository.posts.get(i));
+            }
+        }
+    }
     private static void signUp() {
         System.out.println("Choose the type of signing up:");
         System.out.println("1-With Gmail\t\t2-With Phone number\t\t0-Back");
@@ -117,14 +191,35 @@ public class Main {
 
 
     private static void phoneUp() {
-        System.out.print("Enter your phone number: ");
-        String phoneNumber = scanInt.nextLine();
-        System.out.print("Enter your username: ");
-        String username = scanStr.nextLine();
-        while(true){
-        System.out.print("Enter your password: ");
-        String password = scanInt.nextLine();
-            userService.add(new User(username, password, phoneNumber));
+        System.out.print("Enter full name: ");
+        String fullname = scanStr.nextLine();
+        System.out.print("Enter phone number: (+998) ");
+        String phoneNumber = scanStr.nextLine();
+        if (phoneNumber.length()==9){
+            while (true){
+                String randomNum = "bKtF"+ random.nextInt(1000,9999) + "-HmQd";
+                System.out.println("Your SMS code: " + randomNum);
+                System.out.print("Enter SMS code: ");
+                String smscode= scanStr.nextLine();
+                if (smscode.equals(randomNum)){
+                    System.out.println("SMS ✅");
+                    break;
+                }
+                else {
+                    System.out.println("Incorrect SMS code ❌");
+                }
+            }
+            System.out.print("Enter username: ");
+            String username= scanStr.nextLine();
+            System.out.print("Enter your own password: ");
+            String password= scanStr.nextLine();
+            User user = new User(username,password,phoneNumber,fullname);
+            userService.add(user);
+            System.out.println("Sign Up Successfully ✅");
+             userMenu();
+        }
+        else {
+            System.out.println("Phone Number is Wrong !  Try Again !");
         }
     }
     private static void gmailUp() {
@@ -157,12 +252,10 @@ public class Main {
             }
         }
     }
-    public static void defaultD(){
+     static{
         userService.add(new User("hgghghjh","dli1999"));
         userService.add(new User("mittime","mittivine"));
         userService.add(new User("cristiano","cr7family"));
-           System.out.println("Wrong something. Try Again ❌" );
-
             }
         }
 

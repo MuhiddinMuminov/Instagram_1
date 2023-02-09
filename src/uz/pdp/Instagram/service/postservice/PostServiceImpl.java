@@ -1,6 +1,7 @@
 package uz.pdp.Instagram.service.postservice;
 
 import uz.pdp.Instagram.model.post.Post;
+import uz.pdp.Instagram.model.post.PostType;
 import uz.pdp.Instagram.repository.PostRepository;
 
 import java.util.UUID;
@@ -43,5 +44,10 @@ public class PostServiceImpl implements PostService, PostRepository {
             }
         }
         return -1;
+    }
+
+    @Override
+    public Post getId(PostType type) {
+        return null;
     }
 }
